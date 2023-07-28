@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+
+
+{%block target %}
+{{ super() }}
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+        <div class="custom-menu">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+        </div>
+        <h1><a id="name_authentificated" class="logo">{{name}}</a></h1>
+        <ul class="list-unstyled components mb-5">
+            <li class="active">
+                <a id="homepage"><span class="fa fa-solid fa-server mr-3"></span> Device</a>
+            </li>
+            <li id="dashboard">
+                <a id="dashboard"><span class="fa fa-bar-chart mr-3"></span> Dashboard</a>
+            </li>
+            <!-- <li id="friends">
+                <a id="friends"><span class="fa fa-sticky-note mr-3"></span> Friends</a>
+            </li> -->
+            <li id="logout">
+                <a id="logout" href="{{ url_for('auth.logout') }}"><span class="fa fa-sign-out mr-3"></span> logout</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5 pt-5" hidden="true" style="background-color: #E9ECEF;">
+        <h2 class="mb-4" style="text-align: right;">#Device</h2>
+        <div class="container py-5 align-items-center  " style=" background-color: white; width: 50%;">
+            <h2 class="mb-4" style="text-align: center; color:#233554;"><img src="../static/icons8_Add_Row_2.ico"
+                    style="padding: 0px 10px 0px 10px;"> Add new</h2>
+            <hr>
+            <div class="row" style="border-radius: 5px;">
+
+                <div class="col-md-5">
+                    <div class="form-outline" style="border: 2px;">
+                        <input type="text" id="device_name" class="form-control" data-mdb-showcounter="true"
+                            maxlength="20" required />
+                        <label class="form-label" for="form16">Name of the device :</label>
+                        <div class="form-helper"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-outline" style="border: 2px; ">
+                        <input type="text" id="device_mac" class="form-control" data-mdb-showcounter="true"
+                            maxlength="20" required />
+                        <label class="form-label" for="form16">MAC Address :</label>
+                        <div class="form-helper"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary btn-sm btn-block align-items-center" onclick="add_new_device()"> Add
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <br>
+        <!--  -->
+        <div class="container py-5 align-items-center  " style=" background-color: white; width: 50%;">
+            <h5 class="mb-4" style=" color:#233554;"><img src="../static/icons8_widescreen.ico"
+                    style="padding: 0px 10px 0px 10px;"> List of device</h5>
+            <hr><br>
+            <div class="list-group" style="height:30vh ; overflow: auto;">
+                <ul id="liste">
+                    {% for device in device %}
+                    <li class="list-group-item list-group-item-action">
+                        <div class="device">
+                            <p><i class="fa-solid fa-server"></i> <b>{{device.id}}</b> - {{device.name}}
+                                {{device.mac_address}} </p>
+                        </div>
+                    </li>
+                    {% endfor %}
+
+                </ul>
+                <div class="new_device"></div>
+            </div>
+        </div>
+    </div>
+    <!-- =============================content  2-->
+    <div id="dashboard_content" class="p-4 p-md-5 pt-5" hidden="true" style="background-color: #E9ECEF;">
+        <h2 class="mb-4 " style="text-align: right;">#Dashboard</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- <div class="jumbotron " style="padding-top: 5%; padding-bottom: 5% ; background-color: white; ">
+                    <p class="mb-4">Current </p>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-2"> <img src="../static/icons8_electricity.ico" alt=""></div>
+                        <div class="col-md-10">
+                           
+                        </div>
+                    </div>
+                    <p style="text-align: right;">State : <em style="color: tomato;">Insufficient</em></p>
+                </div> -->
+                <div class="jumbotron" style="background-color: #fff; padding: 2%; border-radius: 20px; " >
+                    <p style="font-size: 22px; font-weight: bold; text-align: center; margin-bottom: 2%;">CPU Usage</p>
+                    <hr style="border-color: #333;">
+                    <div class="row">
+                        <div class="col-md-2" style="text-align: center; padding-left: 5%;">
+                            <i class="fa-solid fa-microchip fa-2x" style="color: #808080;"></i>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-6" style="text-align: center;">
+                                    <em id="cpu" style="color: #333; font-size: 28px;">0.0</em> 
+                                    <br>
+                                    <i class="fa-solid fa-chart-simple-horizontal"></i>
+                                    <!-- <i class="fa-sharp fa-regular fa-chart-pie-simple" style="color: #2F89FC;"></i> -->
+                                    <em style="color: #333;"> %</em>
+                                </div>
+                                <div class="col-md-6" style="text-align: center;">
+                                    <em id="temperature" style="color: #333; font-size: 28px;">0.0</em> 
+                                    <br>
+                                    <i class="fa-solid fa-temperature-low" style="color:#80CAF6;"></i>
+                                    <em style="color: #333;"> CPU</em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="color: #333; text-align: left; margin-top: 2%; margin-right: 5%;">State : 
+                        <em style="color: springgreen;">Stable</em>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- <div class="jumbotron" style="padding-top: 5%; padding-bottom: 5% ; background-color: white; ">
+                    <p class="mb-4">Power supply </p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-2"> <img src="../static/icons8_Electrical.ico" alt=""></div>
+                        <div class="col-md-10">
+                            <div class="row">
+                                <h1 style="font-size: 36px;">
+                              <i class="fa-solid fa-bolt"></i> <em id="current">0.0</em> mA
+                            </h1>
+                                <h1 style="font-size: 36px;">
+                              <i class="fa-solid fa-plug"></i> <em id="voltage">0.0</em> Volt
+                            </h1>
+                            </div>
+                            <p  style=" text-align: center; font-size: large;"> 
+                            </p>
+                        </div>
+                    </div>
+                    <p style="text-align: right;">State : <em style="color: springgreen;">Stable</em></p>
+                </div> -->
+
+                <!-- <div class="jumbotron" style="background-color: #f5f5f5; padding: 5%;">
+                    <h3 style="text-align: center; font-weight: bold; color: #333;">Power Supply</h3>
+                    <hr style="border-top: 2px solid #333; width: 50px; margin: 0 auto;">
+                    <div class="row" style="margin-top: 5%;">
+                        <div class="col-md-5" style="text-align: center;">
+                            <i class="fa fa-bolt" style="font-size: 48px; color: #333;"></i>
+                            <h4 style="color: #333;">Current</h4>
+                            <p style="font-size: 36px; color: #333;" ><em id="current">0.0</em> mA</p>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-5" style="text-align: center;">
+                            <i class="fa fa-plug" style="font-size: 48px; color: #333;"></i>
+                            <h4 style="color: #333;">Voltage</h4>
+                            <p style="font-size: 36px; color: #333;" ><em id="voltage">0.0</em> Volt</p>
+                        </div>
+                    </div>
+                    <hr style="border-top: 2px solid #333; width: 50px; margin: 5% auto;">
+                    <p style="text-align: center; font-size: 16px; color: #333;">State: <span style="color: springgreen;">Stable</span></p>
+                </div> -->
+                <div class="jumbotron" style="background-color: #fff; padding: 2%; border-radius: 20px; " >
+                    <p style="font-size: 22px; font-weight: bold; text-align: center; margin-bottom: 2%;">Power Supply</p>
+                    <hr style="border-color: #333;">
+                    <div class="row">
+                        <div class="col-md-2" style="text-align: center;">
+                            
+                           <i class="fa fa-plug fa-2x"  style="color: #808080;"aria-hidden="true"></i>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-6" style="text-align: center;">
+                                    <em id="current" style="color: #333; font-size: 28px;">0.0</em> 
+                                    <br>
+                                    <i class="fa-solid fa-bolt" style="color:#80CAF6;"></i>
+                                    <em style="color: #333;"> mA</em>
+                                </div>
+                                <div class="col-md-6" style="text-align: center;">
+                                    <em id="voltage" style="color: #333; font-size: 28px;">0.0</em> 
+                                    <br>
+                                    <i class="fa-solid fa-plug" style="color: #80CAF6;"></i>
+                                    <em style="color: #333;"> Volt</em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="color: #333; text-align: left; margin-top: 2%; margin-right: 5%;">State : 
+                        <em style="color: springgreen;">Stable</em>
+                    </p>
+                </div>
+                
+                
+
+                  
+                  
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item" id="btn_connexion">
+                                <a class="nav-link " id="class_connexion">Connection</a>
+                            </li>
+                            <li class="nav-item" id="btn_command">
+                                <a class="nav-link" id="class_command">Command</a>
+
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- connexion toggle -->
+                    <div class="card-body" id="connexion" hidden="false">
+                        <h5 class="card-title">Target IP Address</h5>
+                        <p class="card-text">Status: <em id="ip_state_output">not set</em>
+                        </p>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <form method="POST" id="ip_request">
+                                    <input type="text" class="form-input" name="ipv4" id="ipv4"
+                                        placeholder="xxx.xxx.xxx.xxx"
+                                        style=" border: none;width: 100%; border-radius: 30px; height: 32px; color: gray; padding-left: 5%;"
+                                        minlength="7" maxlength="15" size="15">
+                            </div>
+                            <div class="col-md-5">
+                                <!-- <a class="btn btn-primary btn-sm btn-block" style="border-radius: 16px;" type="submit">Ping
+                                </a> -->
+                                <button type="submit" class="btn btn-primary btn-sm btn-block"
+                                    style="border-radius: 16px;" type="submit">Test Connection</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- command toggle -->
+                    <div class="card-body" id="command" hidden="true">
+                        <form method="POST" id="turn_on_off_target">
+                            <select class="browser-default custom-select" id="device_form" onclick="getSelectedItem()">
+                                <!-- <option selected>Choose device</option> -->
+                                <!-- <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option> -->
+                                {% for device in device%}
+                                <option value={{device.id}}>{{device.id}} - {{device.name}}</option>
+                                {% endfor %}
+                            </select>
+                            <p class="card-text">Status: <em id="ip_state_output"
+                                    style="color: tomato;">Disconnected</em>
+                            </p>
+                            <label class="toggle" for="checkbox_target">
+                                <input class="toggle-checkbox" type="checkbox" id="checkbox_target"
+                                    name="checkbox_target" onclick="toggleTarget()">
+                                <div class="toggle-switch"></div>
+                                <span class="toggle-label" id="toggle_checkbox_label" onclick="toggleTarget()">Turn ON
+                                    the target</span>
+                            </label>
+                        </form>
+                    </div>
+                    <!-- end command toggle -->
+                </div>
+            </div>
+            <!-- line 3 -->
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card" style="align-items: center;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- <p> Realtime performance</p> -->
+                            </div>
+                            <div class="col-md-6" style="text-align: right; padding-right: 50px;">
+                                <!-- <p>Power dissipate
+                                    <em style="font-size: 24px;">2000 Watts</em>
+                                </p> -->
+                            </div>
+                        </div>
+                        <div id="graph" style=" align-items: center; padding-top: 0px;"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <h6 class="card-header">
+                            Current time : <br>
+                            <span id="time"></span>
+                        </h6>
+                        <div class="card-body">
+                            <h5 class="card-title">Electricity source :</h5>
+                            <!--try electricity-battery button  -->
+                            <div class="btn-container" style="width: 100%; text-align: center;">
+                                <!-- <i class="fa-solid fa-utility-pole-double" aria-hidden="true"></i> -->
+                                <label class="switch btn-color-mode-switch">
+                                    <input type="checkbox" name="color_mode" id="color_mode" value="1">
+                                    <label for="color_mode" data-on="Battery" data-off="Jirama"
+                                        class="btn-color-mode-switch-inner"></label>
+                                </label>
+                                <!-- <i class="fa-light fa-car-battery" ></i> -->
+
+                            </div>
+                            <!-- end try fa button -->
+                            <p>Turn <em>OFF</em> after : <em id="countDownText"></em></p>
+                            <!-- <input id="calendar"/>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                    onclick="checkboxFunction()">
+                                <label class="form-check-label" for="flexCheckDefault"
+                                    id="flexCheckDefault_label">
+                                    Active
+                                </label>
+                            </div> -->
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" aria-label="Checkbox for following text input"
+                                            id="flexCheckDefault" onclick="checkboxFunction()">
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Text input with checkbox"
+                                    id="calendar">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- overlay used for the loading content -->
+    <div id="overlay"></div>
+    <!-- content loading button -->
+    <div id="loadingPopup">
+        <p id="loadingText">Loading...</p>
+        <img id="loadingImage" src="../static/Eclipse-1s-48px.svg" />
+    </div>
+    <!-- ====================third part -->
+    <div id="friends_content" class="p-4 p-md-5 pt-5" hidden="true">
+        <h2 class="mb-4">Sidebar #Friends</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+            deserunt mollit anim id est laborum. <br>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+            deserunt mollit anim id est laborum.</p>
+
+    </div>
+    <!-- in the block -->
+</div>
+<!-- <li>
+        <a href="{{ url_for('auth.logout') }}"><span class="fa fa-sticky-note mr-3"></span> Friends</a>
+    </li> -->
+</section>
+{%endblock%}

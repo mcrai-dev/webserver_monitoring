@@ -1,0 +1,6 @@
+FLASK_APP = "__init__"
+FLASK_ENV = "development"
+FLASK_DEBUG = True
+SERVER_NAME='azert'
+FLASK_RUN_HOST ='192.168.1.193'
+FLASK_RUN_PORT=5000

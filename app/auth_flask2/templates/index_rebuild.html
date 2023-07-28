@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+    <!-- facivon -->
+    <link rel="icon" type="image/x-icon" href="../static/img/favicon.ico">
+
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    <link rel="stylesheet" href="../static/mediaQuery.css">
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <!-- SCRIPT Files -->
+    <script src="https://kit.fontawesome.com/2f80850cd7.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+    <!-- date and time picker -->
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+</head>
+
+<style>
+    .ip_connected {
+        color: green;
+    }
+</style>
+
+<body>
+    <div class="wrapper">
+        <!-- start sidebar -->
+        <!-- <div class="sidebar">
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="#" class="simple-text logo-mini">MG</a>
+                    <a href="#" class="simple-text logo-normal">Monitoring system</a>
+                </div>
+                <ul class="nav">
+                    <li class="active">
+                        <a href=""><i class="fa-sharp fa-solid fa-chart-pie"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <p>test</p>
+                    </li>
+                </ul>
+            </div>
+        </div> -->
+        <!-- end sidebar -->
+
+        <!-- start main panel -->
+        <div class="content">
+            <div class="main-panel">
+                <div class="row" style="margin-left: 20%; margin-right:2%;">
+                    <div class="col-md-4 " style="color: gray;">
+                        <p>
+                            Current Value
+                        </p>
+                        <hr style="background-color:gray ;">
+                        <div class="jumbotron"
+                            style="padding-top: 5%; padding-bottom: 5% ; color: gray; background-color: #27293D;">
+                            <!-- <p>performance :</p> -->
+                            <div class="row">
+                                <div class="col-md-2"> <img src="../static/img/icons8_electricity.ico" alt=""></div>
+                                <div class="col-md-10">
+                                    <p class="display-4" style=" text-align: center; ">122.2 <em>mA</em></p>
+                                </div>
+                            </div>
+                            <p style="text-align: right;">State : <em style="color: tomato;">Insufficient</em></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 " style="color: gray;">
+                        <p>
+                            Tension Value
+                        </p>
+                        <hr style="background-color:gray ;">
+                        <div class="jumbotron"
+                            style="padding-top: 5%; padding-bottom: 5% ; color: gray; background-color: #27293D;">
+                            <div class="row">
+                                <div class="col-md-2"> <img src="../static/img/icons8_Electrical.ico" alt=""></div>
+                                <div class="col-md-10">
+                                    <p class="display-4" style=" text-align: center; ">122.2 <em>Volt</em></p>
+                                </div>
+                            </div>
+                            <p style="text-align: right;">State : <em style="color: springgreen;">stable</em></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 ">
+                        <div class="jumbotron"
+                            style="padding-top: 5%; padding-bottom: 5% ; color: gray; background-color: #27293D;">
+                            <p>
+                                Current time : <br>
+                                <span id="time"></span>
+                                <hr style=" background-color: gray;">
+                            </p>
+                            <h4 style="text-align: center;">Target IP address</h4>
+
+                            <form action="" method="POST" id="ip_request">
+                                <input type="text" class="form-input" name="ipv4" id="ipv4"
+                                    placeholder="xxx.xxx.xxx.xxx"
+                                    style="background-color:#1E1E2F ; border: none;width: 100%; border-radius: 30px; height: 32px; color: gray; padding-left: 5%;"
+                                    minlength="7" maxlength="15" size="15">
+
+                                <div class="row" style="padding-top: 3%; padding-bottom: 2%;">
+                                    <div class="col-md-7">
+                                        <p> Status : <em style="color:gray;" id="ip_state_output"></em></p>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <button class="buttonConnect" type="submit" name="check_ip_btn"
+                                            value="ip_value">Connect</button>
+                                    </div>
+                                </div>
+                                <label class="toggle" for="checkbox_target">
+                                    <input class="toggle-checkbox" type="checkbox" id="checkbox_target"
+                                        name="checkbox_target">
+                                    <div class="toggle-switch"></div>
+                                    <span class="toggle-label" id="toggle_checkbox_label">Target is Off</span>
+                                </label>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- try -->
+                <div class="row" style="margin-left: 20%; margin-right:2%;">
+                    <div class="col-lg-8 ">
+                        <div class="jumbotron" style="background-color: #27293D; color: gray; ">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p> Realtime performance</p>
+                                </div>
+                                <div class="col-md-6" style="text-align: right;">
+                                    <p>Power dissipate
+                                        <em style="font-size: 24px;">2000 Watts</em>
+                                    </p>
+                                </div>
+                            </div>
+                            <!--realtime chart  -->
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="myChart"  style="position: relative; height:40vh; width:80vw"></canvas>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 " style="color: gray;">
+                        <div class="jumbotron" style="background-color: #27293D;">
+                            <p>Electricity source :</p>
+                            <!--try electricity-battery button  -->
+                            <div class="btn-container" style="width: 100%; text-align: center;">
+                                <!-- <i class="fa-solid fa-utility-pole-double" aria-hidden="true"></i> -->
+                                <label class="switch btn-color-mode-switch">
+                                    <input type="checkbox" name="color_mode" id="color_mode" value="1" disabled="true">
+                                    <label for="color_mode" data-on="Battery" data-off="Jirama"
+                                        class="btn-color-mode-switch-inner"></label>
+                                </label>
+                                <!-- <i class="fa-light fa-car-battery" ></i> -->
+
+                            </div>
+                            <!-- end try fa button -->
+                            <p>Turn <em>OFF</em> after : <em id="countDownText"></em></p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input id='calendar' />
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                            onclick="checkboxFunction()">
+                                        <label class="form-check-label" for="flexCheckDefault"
+                                            id="flexCheckDefault_label">
+                                            ACTIVE
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- try -->
+                <div class="row" style="margin-left: 20%; margin-right:2%;">
+                    <div class="col-md-12 ">
+                        <div class="jumbotron">
+                            3- Lorem ipsum dolor sit amet consectetur adipisicing elit. A, alias atque iusto sunt magnam
+                            eaque
+                            doloribus aut modi provident pariatur! Suscipit facere, deleniti minus maiores corporis illo
+                            possimus. Totam, saepe.
+                        </div>
+                    </div>
+                </div>
+                <!-- try -->
+            </div>
+        </div>
+        <!-- end main panel -->
+    </div>
+
+    <script>
+        // for ping check connexion 
+        $('#checkbox_target').click(function () {
+            $("#color_mode").prop('checked', false);
+            if ($('#checkbox_target').is(":checked")) {
+                $('#toggle_checkbox_label').text('OFFFFFFF')
+
+            } else {
+                $('#toggle_checkbox_label').text('ONNNNN')
+            }
+        });
+
+        // for checking ip
+        $(document).ready(function () {
+            $("#ip_request").on('submit', function (e) {
+                $.ajax({
+                    data: {
+                        code: 'ip_check',
+                        ip_Address: $('#ipv4').val(),
+                    },
+                    // contentType: 'application/JSON',
+                    type: 'POST',
+                    url: '/'
+                }).done(function (data) {
+                    $('#ip_state_output').text(data.out).css('color', 'springgreen').show();
+                    $("#color_mode").prop('checked', true);
+                    $('#countDownText').text(data.out)
+                });
+                e.preventDefault();
+            });
+            //  get the calendar date et send it to the server
+            $('#flexCheckDefault').click(function (e) {
+                if ($('#flexCheckDefault').is(":checked")) {
+                    var date_and_time = $("#calendar").val();
+                    console.log("the date time set is = " + date_and_time);
+                    console.log('size of text is: ' + date_and_time.length);
+                    console.log('time is' + date_and_time.substring(date_and_time.length - 8, date_and_time.length))
+                    $.ajax({
+                        data: {
+                            code: "timeBrut",
+                            timeBrut: date_and_time,
+                        },
+                        type: 'POST',
+                        url: '/'
+                    }).done(function (data) {
+                        // $('#countDownText').text(data.count).show();
+                        // document.getElementById("countDownText").innerHTML = text;
+                        // $('#countDownText').text(data.count).css('color', 'springgreen').show();
+                        console.log("time is sent ")
+                    });
+                    e.preventDefault();
+
+                    // send the loop function to ask data from the server
+                    // while ($('#flexCheckDefault').is(":checked") == true) {
+                    //     $.ajax({
+                    //         data: {
+                    //             code: 'ask_time',
+                    //         },
+                    //         type: 'POST',
+                    //         url:'/'
+                    //     }).done(function(data){
+                    //         $('#countDownText').text(data.time_shedule).show();
+                    //     });
+                    // }
+                } else {
+
+                }
+            });
+
+        });
+
+        // TO START COUNTDOWN
+        var countDownDate = "";
+        function checkboxFunction() {
+            var checkBox = document.getElementById("flexCheckDefault");
+            if (checkBox.checked == true) {
+                start_countDown();
+                document.getElementById("flexCheckDefault_label").innerHTML = "DESACTIVE";
+            } else if (checkBox.checked == false) {
+                document.getElementById("flexCheckDefault_label").innerHTML = "ACTIVE";
+                countDownDate = new Date().getTime();
+                document.getElementById("countDownText").innerHTML = "NOT SET &";
+                if (document.getElementById("calendar").value == "") {
+                    document.getElementById("countDownText").innerHTML = "NOT SET";
+                }
+
+            }
+        }
+        // ========================= for date and time picker
+        jSuites.calendar(document.getElementById('calendar'), {
+            format: 'MMM dd, YYYY HH:MM:SS',
+            time: true,
+        });
+        function start_countDown() {
+            // get the data in input field
+            document.getElementById("calendar").value;
+            document.getElementById("countDownText").value;
+            // var countdownText is set to show the date from date picker========================
+            // countDownText.innerText = document.getElementById("calendar").value;
+            $('#countDownText').text(document.getElementById("calendar").value).css('color', 'springgreen').show();
+
+            // Set the date we're counting down to
+            countDownDate = new Date(document.getElementById("calendar").value).getTime();
+            // Update the count down every 1 second
+            var x = setInterval(function () {
+
+                // Get today's date and time
+                var now = new Date().getTime();
+
+                // Find the distance between now and the count down date
+                var distance = countDownDate - now;
+
+                // Time calculations for days, hours, minutes and seconds
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Output the result in an element with id="demo" ========================= desactive 
+                // document.getElementById("countDownText").innerHTML = days + "d " + hours + "h "
+                //     + minutes + "m " + seconds + "s ";
+
+                // If the count down is over, write some text 
+                if (distance < 0) {
+                    clearInterval(x);
+                    $('#countDownText').text("EXPIRED").css('color', 'gray').show();
+                    document.getElementById("flexCheckDefault_label").innerHTML = "ACTIVE";
+                    document.getElementById("countDownText").innerHTML = "EXPIRED";
+                    uncheck();
+                }
+            }, 1000);
+        }
+        function uncheck() { // uncheck automatically the checkbox
+            document.getElementById('flexCheckDefault').checked = false;
+        }
+        // ========================= for toggle button jirama / battery
+        $(document).ready(function () {
+            $("#color_mode").on("change", function () {
+                colorModePreview(this);
+            })
+        });
+
+        function colorModePreview(ele) {
+            if ($(ele).prop("checked") == true) {
+                $('body').addClass('dark-preview');
+                $('body').removeClass('white-preview');
+            }
+            else if ($(ele).prop("checked") == false) {
+                $('body').addClass('white-preview');
+                $('body').removeClass('dark-preview');
+            }
+        }
+        // =========================for the IP address
+        var ipv4_address = $('#ipv4');
+        ipv4_address.inputmask({
+            alias: "ip",
+            greedy: false // mean taht the initial mask shown will be "" instead of "-____".
+        });
+        // ==========================for the realtime
+        `use strict`;
+        function refreshTime() {
+            const timeDisplay = document.getElementById("time");
+            const dateString = new Date().toLocaleString();
+            const formattedString = dateString.replace(", ", " - ");
+            timeDisplay.textContent = formattedString;
+            var timeNowToUseForChart = formattedString;
+        }
+        setInterval(refreshTime, 1000);
+
+        // ========================for the chart
+        $(document).ready(function () {
+            var ctx = document.getElementById("myChart").getContext("2d");
+
+            var data = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [{
+                    label: "Realtime Current ",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: [1, 2, 3, 4, 5, 6, 7]
+                }, {
+                    label: "Realtime tension",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    // data: [100, 99, 98, 97, 96, 94, 93]
+                    data: [100, 100, 100]
+                }]
+            };
+
+            var months = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            var options = {
+                animation: false,
+                //Boolean - If we want to override with a hard coded scale
+                scaleOverride: true,
+                //** Required if scaleOverride is true **
+                //Number - The number of steps in a hard coded scale
+                scaleSteps: 10,
+                //Number - The value jump in the hard coded scale
+                scaleStepWidth: 10,
+                //Number - The scale starting value
+                scaleStartValue: 0,
+                // responsive
+                responsive: true
+            };
+
+            var myLineChart = new Chart(ctx).Line(data, options);
+
+            setInterval(function () {
+                setData(data.datasets[0].data);
+                setData(data.datasets[1].data);
+                setLabels(data.labels);
+
+                var myLineChart = new Chart(ctx).Line(data, options);
+            }, 1000);
+
+            function setLabels(labels) {
+                var nextMonthIndex = months.indexOf(labels[labels.length - 1]) + 1;
+                var nextMonthName = months[nextMonthIndex] != undefined ? months[nextMonthIndex] : "January";
+                labels.push(nextMonthName);
+                console.log('the next month is: ' + nextMonthName)
+                // labels.push(timeNowToUseForChart );
+                labels.shift();
+            }
+
+            function setData(data) {
+                data.push(Math.floor(Math.random() * 100) + 1);
+                data.shift();
+            }
+
+            function convertMonthNameToNumber(monthName) {
+                var myDate = new Date(monthName + " 1, 2016");
+                var monthDigit = myDate.getMonth();
+                return isNaN(monthDigit) ? 0 : (monthDigit + 1);
+            }
+
+
+        });
+
+        // var today = new Date();
+        // var t = today.getHour() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+        // dataplot = new Chart(document.getElementById("myLineChart"), {
+        //     type: 'line',
+        //     data: {
+        //         labels: [],
+        //         dataseets: [{
+        //             data:[],
+        //             label: "temperature (°c)",
+        //             borderColor: "#sdfb",
+        //             fill: false
+        //         }],
+        //     }
+        // });
+
+        // function addData(label, data) {
+        //     dataplot.data.labels.push(label);
+        //     dataplot.data.datasets[0].data.push(data);
+        //     dataplot.update();
+        // }
+        // addData(t, data.value);
+
+    </script>
+</body>
+
+</html>
